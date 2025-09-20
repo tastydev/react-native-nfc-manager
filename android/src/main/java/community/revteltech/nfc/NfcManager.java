@@ -45,7 +45,7 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
     private static final String LOG_TAG = "ReactNativeNfcManager";
     private final List<IntentFilter> intentFilters = new ArrayList<>();
     private final ArrayList<String[]> techLists = new ArrayList<>();
-    private final Context context;
+    private final ReactApplicationContext context;
     private Boolean isForegroundEnabled = false;
     private Boolean isResumed = false;
     private WriteNdefRequest writeNdefRequest = null;
@@ -1007,7 +1007,7 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
             Log.d(LOG_TAG, "start");
 
             IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
-            Activity currentActivity = getCurrentActivity();
+            Activity currentActivity = context.getCurrentActivity();
             if (currentActivity == null) {
                 callback.invoke(ERR_GET_ACTIVITY_FAIL);
                 return;
@@ -1027,7 +1027,7 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
     @ReactMethod
     public void isSupported(String tech, Callback callback){
         Log.d(LOG_TAG, "isSupported");
-        Activity currentActivity = getCurrentActivity();
+        Activity currentActivity = context.getCurrentActivity();
         if (currentActivity == null) {
             callback.invoke(ERR_GET_ACTIVITY_FAIL);
             return;
@@ -1065,7 +1065,7 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
     @ReactMethod
     public void goToNfcSetting(Callback callback) {
         Log.d(LOG_TAG, "goToNfcSetting");
-        Activity currentActivity = getCurrentActivity();
+        Activity currentActivity = context.getCurrentActivity();
         if (currentActivity == null) {
             callback.invoke(ERR_GET_ACTIVITY_FAIL);
             return;
@@ -1081,7 +1081,7 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
 
     @ReactMethod
     public void getLaunchTagEvent(Callback callback) {
-        Activity currentActivity = getCurrentActivity();
+        Activity currentActivity = context.getCurrentActivity();
         if (currentActivity == null) {
             callback.invoke(ERR_GET_ACTIVITY_FAIL);
             return;
@@ -1297,7 +1297,7 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
     private void enableDisableForegroundDispatch(boolean enable) {
         Log.i(LOG_TAG, "enableForegroundDispatch, enable = " + enable);
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
-        Activity currentActivity = getCurrentActivity();
+        Activity currentActivity = context.getCurrentActivity();
         final NfcManager manager = this;
         if (nfcAdapter != null && currentActivity != null && !currentActivity.isFinishing()) {
             try {
@@ -1354,7 +1354,7 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
     }
 
     private PendingIntent getPendingIntent() {
-        Activity activity = getCurrentActivity();
+        Activity activity = context.getCurrentActivity();
         assert activity != null;
         Intent intent = new Intent(activity, activity.getClass());
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
