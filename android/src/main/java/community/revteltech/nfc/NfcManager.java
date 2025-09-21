@@ -789,6 +789,59 @@ class NfcManager extends NativeNfcManagerSpec implements ActivityEventListener, 
     }
 
     @ReactMethod
+    public void getTimeout(Callback callback) {
+        synchronized (this) {
+            if (techRequest != null) {
+                try {
+                    String tech = techRequest.getTechType();
+                    TagTechnology baseTechHandle = techRequest.getTechHandle();
+                    // TagTechnology is the base class for each tech (ex, NfcA, NfcB, IsoDep ...)
+                    // but it doesn't provide transceive in its interface, so we need to explicitly cast it
+                    switch (tech) {
+                        case "NfcA": {
+                            NfcA techHandle = (NfcA) baseTechHandle;
+                            int timeout = techHandle.getTimeout();
+                            callback.invoke(null, timeout);
+                            return;
+                        }
+                        case "NfcF": {
+                            NfcF techHandle = (NfcF) baseTechHandle;
+                            int timeout = techHandle.getTimeout();
+                            callback.invoke(null, timeout);
+                            return;
+                        }
+                        case "IsoDep": {
+                            IsoDep techHandle = (IsoDep) baseTechHandle;
+                            int timeout = techHandle.getTimeout();
+                            callback.invoke(null, timeout);
+                            return;
+                        }
+                        case "MifareClassic": {
+                            MifareClassic techHandle = (MifareClassic) baseTechHandle;
+                            int timeout = techHandle.getTimeout();
+                            callback.invoke(null, timeout);
+                            return;
+                        }
+                        case "MifareUltralight": {
+                            MifareUltralight techHandle = (MifareUltralight) baseTechHandle;
+                            int timeout = techHandle.getTimeout();
+                            callback.invoke(null, timeout);
+                            return;
+                        }
+                    }
+                    Log.d(LOG_TAG, "getTimeout not supported");
+                    callback.invoke(ERR_API_NOT_SUPPORT);
+                } catch (Exception ex) {
+                    Log.d(LOG_TAG, ex.toString());
+                    callback.invoke(ex.toString());
+                }
+            } else {
+                callback.invoke(ERR_NO_TECH_REQ);
+            }
+        }
+    }
+
+    @ReactMethod
     public void connect(ReadableArray techs, Callback callback){
         synchronized(this) {
             try {
