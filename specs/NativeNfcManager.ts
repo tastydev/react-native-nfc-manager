@@ -57,6 +57,7 @@ export interface Spec extends TurboModule {
   goToNfcSetting(callback: (err?: string) => void): void;
   getLaunchTagEvent(callback: (err?: string, tag?: Object) => void): void;
   setTimeout(timeout: number, callback: (err?: string, tag?: Object) => void): void;
+  getTimeout(callback: (err?: string, timeout?: number) => void): void;
   connect(techs: string[], callback: (err?: string) => void): void;
   close(callback: (err?: string) => void): void;
   transceive(bytes: number[], callback: (err?: string, bytes?: number[]) => void): void;
